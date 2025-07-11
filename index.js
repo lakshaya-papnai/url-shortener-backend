@@ -3,7 +3,9 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const FRONTEND_REDIRECT_BASE = process.env.FRONTEND_REDIRECT_BASE || 'https://lakshaya-url.vercel.app/r'; // 🔥 Replace with your actual Vercel domain
+
+// ✅ Updated redirect base to match new Vercel deployment
+const FRONTEND_REDIRECT_BASE = process.env.FRONTEND_REDIRECT_BASE || 'https://go-pi-five.vercel.app/r';
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +23,7 @@ function generateSlug() {
   return slug;
 }
 
-// POST /shorten → Create short slug & return frontend redirect URL
+// 🔗 POST /shorten → Create a short slug and return frontend redirect link
 app.post('/shorten', (req, res) => {
   const { url } = req.body;
 
@@ -32,16 +34,15 @@ app.post('/shorten', (req, res) => {
   const slug = generateSlug();
   urlMap[slug] = url;
 
-  // 🔗 Return frontend-based short link instead of backend link
   const shortUrl = `${FRONTEND_REDIRECT_BASE}/${slug}`;
   res.json({ original: url, short: shortUrl });
 });
 
-// GET /:slug → Actual redirect handler used by frontend redirect page
+// 🌐 GET /:slug → Return original URL for frontend to redirect
 app.get('/:slug', (req, res) => {
   const longUrl = urlMap[req.params.slug];
   if (longUrl) {
-    return res.send(longUrl); // 🧠 Frontend will receive and redirect
+    return res.send(longUrl);
   }
   res.status(404).json({ error: 'Short link not found' });
 });
