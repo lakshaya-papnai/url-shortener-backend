@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
+const BASE_URL = process.env.BASE_URL || `https://url-shortener-backend-6666.onrender.com`;
 
 app.use(cors());
 app.use(express.json());
