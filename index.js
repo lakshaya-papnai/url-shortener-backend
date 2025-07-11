@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +31,7 @@ app.post('/shorten', (req, res) => {
 
   const slug = generateSlug();
   urlMap[slug] = url;
-  const shortUrl = `http://localhost:${PORT}/${slug}`;
+  const shortUrl = `${BASE_URL}/${slug}`;
 
   res.json({ original: url, short: shortUrl });
 });
@@ -45,5 +46,5 @@ app.get('/:slug', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at ${BASE_URL}`);
 });
