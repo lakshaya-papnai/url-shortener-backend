@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || `https://url-shortener-backend-6666.onrender.com`;
+const FRONTEND_REDIRECT_BASE = process.env.FRONTEND_REDIRECT_BASE || 'https://lakshaya-url.vercel.app/r'; // 🔥 Replace with your actual Vercel domain
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +21,7 @@ function generateSlug() {
   return slug;
 }
 
-// POST /shorten → Create a new short URL
+// POST /shorten → Create short slug & return frontend redirect URL
 app.post('/shorten', (req, res) => {
   const { url } = req.body;
 
@@ -31,20 +31,21 @@ app.post('/shorten', (req, res) => {
 
   const slug = generateSlug();
   urlMap[slug] = url;
-  const shortUrl = `${BASE_URL}/${slug}`;
 
+  // 🔗 Return frontend-based short link instead of backend link
+  const shortUrl = `${FRONTEND_REDIRECT_BASE}/${slug}`;
   res.json({ original: url, short: shortUrl });
 });
 
-// GET /:slug → Redirect to original URL
+// GET /:slug → Actual redirect handler used by frontend redirect page
 app.get('/:slug', (req, res) => {
   const longUrl = urlMap[req.params.slug];
   if (longUrl) {
-    return res.redirect(longUrl);
+    return res.send(longUrl); // 🧠 Frontend will receive and redirect
   }
-  res.status(404).send('Short link not found');
+  res.status(404).json({ error: 'Short link not found' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at ${BASE_URL}`);
+  console.log(`🚀 Backend running with redirect base: ${FRONTEND_REDIRECT_BASE}`);
 });
