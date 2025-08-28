@@ -1,4 +1,5 @@
-Personal URL Shortener
+![Screenshot](img.png
+)Personal URL Shortener
 This project is the backend for a full-stack URL shortening service, built with a focus on performance, scalability, and persistence. Unlike simple tutorial projects, this backend is architecturally sound, utilizing a proper database for permanent data storage and a caching layer to handle high traffic efficiently.
 
 Key Features
